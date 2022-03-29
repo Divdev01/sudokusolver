@@ -1,5 +1,5 @@
 import itertools
-
+from random import *
 class SudokuSolver:
     
     def __init__(self, squares, all_units, peers):
@@ -98,7 +98,33 @@ class SudokuSolver:
     
 
 
-    def backtrack(self,gridValDict, constraint):
+    # def backtrack(self,gridValDict, constraint):
+        
+    #     gridValDict = self.reduceGridVal(gridValDict, constraint)
+    #     if(gridValDict is False):
+    #         return False
+    #     # Sudoku solved!! if len of all values is 1
+    #     #print("length:",[len(gridValDict[sq]) for sq in squares] )
+    #     #print([len(gridValDict[sq]) == 1 for sq in squares])
+    #     #print("boolean", all([len(gridValDict[sq]) == 1 for sq in squares]))
+    #     if(all([len(gridValDict[sq]) == 1 for sq in self.squares])):
+    #     #  print("**********")
+    #         return gridValDict
+    #     #unfilled square with min number of digits
+    #     n,sq = min((len(gridValDict[sq]), sq) for sq in self.squares if len(gridValDict[sq]) > 1)
+    #     # display(gridValDict)
+    #     for digit in gridValDict[sq]:
+    #         gridValCopy = gridValDict.copy()
+    #         gridValCopy[sq] = digit
+
+    #         # success = backtrack(gridValCopy)
+    #         # if success:
+    #         #   return success
+            
+    #         if( self.backtrack(gridValCopy, constraint) ):
+    #             return self.backtrack(gridValCopy, constraint)
+
+    def backtrack(self,gridValDict, constraint, var_order):
         
         gridValDict = self.reduceGridVal(gridValDict, constraint)
         if(gridValDict is False):
@@ -111,7 +137,16 @@ class SudokuSolver:
         #  print("**********")
             return gridValDict
         #unfilled square with min number of digits
-        n,sq = min((len(gridValDict[sq]), sq) for sq in self.squares if len(gridValDict[sq]) > 1)
+        if(var_order == 'min'):
+            n,sq = min((len(gridValDict[sq]), sq) for sq in self.squares if len(gridValDict[sq]) > 1)
+        
+        #randomly select an unfilled square
+        if(var_order == 'rand'):
+            sq = choice([sq for sq in self.squares if len(gridValDict[sq]) > 1])
+
+        # Select the square in order
+        if(var_order == 'static'):
+            sq = [sq for sq in self.squares if len(gridValDict[sq]) > 1][0]
         # display(gridValDict)
         for digit in gridValDict[sq]:
             gridValCopy = gridValDict.copy()
@@ -121,16 +156,16 @@ class SudokuSolver:
             # if success:
             #   return success
             
-            if( self.backtrack(gridValCopy, constraint) ):
-                return self.backtrack(gridValCopy, constraint)
+            if( self.backtrack(gridValCopy, constraint, var_order) ):
+                return self.backtrack(gridValCopy, constraint, var_order)
 
-    def solvePuzzle(self,grid,constraint):
+    def solvePuzzle(self,grid,constraint, var_order):
         gridValDict = self.gridtoValues(grid)
         reduced_puzzle = self.reduceGridVal(gridValDict,constraint)
         # print("reduced puzzle after constraint propagation")
         # self.display(reduced_puzzle)
         # print("Solved Puzzle")
-        soln = self.backtrack(reduced_puzzle, constraint)
+        soln = self.backtrack(reduced_puzzle, constraint, var_order)
         return soln
         # self.display(soln)
 
