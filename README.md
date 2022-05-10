@@ -1,8 +1,7 @@
 # sudokusolver
 Sudoku is number puzzle with 9X9 grid with 9 3X3 subgrids. Some of the squares are filled with numbers. The objective of the puzzle is to fill all the 81 squares with numbers from 1-9 in a way that no number gets repeated in each row, column or box.
 
-The objective of this work is to design an agent that solves sudoku puzzle.
-This project is done as a term project for Intelligent agents and Reinforcemnet Learning
+The objective of this work is to design an agent that solves sudoku puzzle. The Agent uses the following steps
 
 ## Constraint Propagation
 Constraint propagation is an inference that can be used to reduce the domain values for the variable, that will inturn reduces the domain value of another variable and so on.
